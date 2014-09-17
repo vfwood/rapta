@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
+    <display-name>HelloWorld Application</display-name>
+    <description>
+        This is a simple web application with a source code organization
+        based on the recommendations of the Application Developer's Guide.
+    </description>
+
+    <servlet>
+        <servlet-name>UserDetailServlet</servlet-name>
+        <servlet-class>rapta.UserDetailServlet</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>UserTestServlet</servlet-name>
+        <servlet-class>rapta.UserTestServlet</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>AdminUserServlet</servlet-name>
+        <servlet-class>rapta.AdminUserServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>LoggedInUserServlet</servlet-name>
+        <servlet-class>rapta.LoggedInUserServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>AnonUserServlet</servlet-name>
+        <servlet-class>rapta.AnonUserServlet</servlet-class>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>UserTestServlet</servlet-name>
+        <url-pattern>/user/test</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>UserDetailServlet</servlet-name>
+        <url-pattern>/user/detail</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>AdminUserServlet</servlet-name>
+        <url-pattern>/resources/admin</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>LoggedInUserServlet</servlet-name>
+        <url-pattern>/resources/user</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>AnonUserServlet</servlet-name>
+        <url-pattern>/resources/public</url-pattern>
+    </servlet-mapping>
+    
+    <security-role>
+        <role-name>Administrators</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>users</role-name>
+    </security-role>
+
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>
+                Admin only resource
+            </web-resource-name>
+            <url-pattern>/resources/admin</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>Administrators</role-name>
+        </auth-constraint>
+    </security-constraint>
+    
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>
+                Logged-in only resource
+            </web-resource-name>
+            <url-pattern>/resources/user</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>users</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+	<!-- this is not the WebLogic security realm to use - it can only use the
+	default / active one. This is just the realm used in Basic Authentication:
+
+	From RFC 1945 (HTTP/1.0) and RFC 2617 (HTTP Authentication referenced by HTTP/1.1)
+
+    The realm attribute (case-insensitive) is required for all authentication schemes 
+    which issue a challenge. The realm value (case-sensitive), in combination with the 
+    canonical root URL of the server being accessed, defines the protection space. 
+    These realms allow the protected resources on a server to be partitioned into a set
+    of protection spaces, each with its own authentication scheme and/or authorization 
+    database. The realm value is a string, generally assigned by the origin server, 
+    which may have additional semantics specific to the authentication scheme.
+	  -->
+   <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>raptarealm</realm-name>
+    </login-config>
+    
+</web-app> 

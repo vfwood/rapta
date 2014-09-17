@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<project name="rapta" default="deploy">
+
+	<taskdef name="wldeploy" classname="weblogic.ant.taskdefs.management.WLDeploy">
+		<classpath path="./lib/wlfullclient.jar" />
+	</taskdef>
+
+
+	<target name="clean">
+		<delete dir="./tmp" />
+	</target>
+
+	<target name="prepare" depends="clean">
+		<mkdir dir="./tmp/war/WEB-INF/classes" />
+	</target>
+
+	<target name="compile" depends="prepare">
+		<javac srcdir="./src/main/java" destdir="./tmp/war/WEB-INF/classes" debug="true" debuglevel="lines,vars,source">
+			<classpath path="./lib/wlfullclient.jar" />
+		</javac>
+	</target>
+
+	<target name="war" depends="compile">
+		<copy file="./weblogic.xml" todir="./tmp/war/WEB-INF"/>
+		<copy file="./webapp/index.jsp" todir="./tmp/war/"/>
+		<war destfile="./tmp/dist/rapta.war" webxml="./web.xml" basedir="./tmp/war">
+		</war>
+	</target>
+
+	<target name="deploy" depends="war">
+		<wldeploy action="deploy" verbose="true" debug="true" name="rapta" source="./tmp/dist/rapta.war" user="weblogic" password="welcome1" upload="true" adminurl="t3://192.168.223.128:7001" targets="AdminServer" />
+	</target>
+
+</project>
+
